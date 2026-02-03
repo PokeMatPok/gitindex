@@ -1,0 +1,24 @@
+{
+  "name": "Gitindex",
+  "description": "",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "c/hello.html",
+    "default_icon": "logo.png"
+  },
+  "content_scripts": [
+    {
+      "matches":[
+        "https://github.com/*",
+        "https://*.github.com/*"
+        ],
+        "css":[
+
+        ],
+        "js": [
+          "c/popup.js"
+        ]
+    }
+  ]
+}
