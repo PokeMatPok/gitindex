@@ -1,0 +1,150 @@
+.gitindex-main-popup-view {
+        position: absolute;
+        z-index: 999999;
+        background-color: #0d1117;
+        color: #e6edf3;
+        border: 1px solid #3d444d;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(1, 4, 9, 0.5);
+        font-size: 14px;
+        width: 320px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+    }
+
+    .gitindex-popup-header {
+        display: flex;
+        align-items: center;
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .gitindex-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 1px solid #30363d;
+    }
+
+    .gitindex-header-text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1;
+    }
+
+    .gitindex-header-text h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: #e6edf3;
+    }
+
+    .gitindex-user-tag {
+        background-color: #388bfd1a;
+        color: #ffffff;
+        padding: 2px 7px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+        display: inline-block;
+        width: fit-content;
+    }
+
+    .gitindex-popup-body {
+        padding: 0 16px 16px;
+    }
+
+    .gitindex-stats-row {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .gitindex-stat-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 8px;
+        border: 1px solid #3d444d;
+        border-radius: 6px;
+    }
+
+    .gitindex-stat-item img {
+        width: 16px;
+        height: 16px;
+        opacity: 0.7;
+    }
+
+    .gitindex-stat-label {
+        font-size: 12px;
+        color: #8b949e;
+    }
+
+    .gitindex-stat-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: #e6edf3;
+    }
+
+    hr {
+        width: 100%;
+        border: 0;
+        height: 1px;
+        background-color: #30363d;
+        margin: 12px 0;
+    }
+
+    .gitindex-info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .gitindex-info-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+        border: 1px solid #30363d;
+        border-radius: 6px;
+    }
+
+    .gitindex-info-item img {
+        width: 16px;
+        height: 16px;
+        opacity: 0.7;
+        flex-shrink: 0;
+    }
+
+    .gitindex-info-item > div {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .gitindex-info-label {
+        font-size: 11px;
+        color: #8b949e;
+    }
+
+    .gitindex-info-value {
+        font-size: 13px;
+        color: #e6edf3;
+        font-weight: 500;
+    }
+
+    .gitindex-description {
+        margin: 0;
+        font-size: 12px;
+        color: #8b949e;
+        line-height: 1.4;
+    }
+
+    .gitindex-language-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
