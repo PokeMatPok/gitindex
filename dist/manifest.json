@@ -4,21 +4,31 @@
   "version": "1.0",
   "manifest_version": 3,
   "action": {
-    "default_popup": "c/hello.html",
+    "default_popup": "documents/hello.html",
     "default_icon": "logo.png"
   },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/*"
+      ],
+      "matches": [
+        "https://github.com/*"
+      ]
+    }
+  ],
   "content_scripts": [
     {
-      "matches":[
+      "matches": [
         "https://github.com/*",
         "https://*.github.com/*"
-        ],
-        "css":[
-
-        ],
-        "js": [
-          "c/popup.js"
-        ]
+      ],
+      "css": [
+        "styles/popup.css"
+      ],
+      "js": [
+        "compiled/popup.js"
+      ]
     }
   ]
 }
