@@ -1,0 +1,2 @@
+esbuild src/search.ts --bundle --format=iife --outfile=dist/compiled/search.js --tsconfig=tsconfig.json
+esbuild src/repo.ts --bundle --format=iife --outfile=dist/compiled/repo.js --tsconfig=tsconfig.json

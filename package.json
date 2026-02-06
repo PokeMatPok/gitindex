@@ -4,8 +4,8 @@
   "description": "",
   "main": "./src/index.ts",
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --format=iife --outfile=dist/compiled/popup.js --tsconfig=tsconfig.json",
-    "watch": "esbuild src/index.ts --bundle --format=iife --outfile=dist/compiled/popup.js --tsconfig=tsconfig.json --watch"
+    "build": " powershell ./build.ps1",
+    "watch": "esbuild src/search.ts --bundle --format=iife --outfile=dist/compiled/search.js --tsconfig=tsconfig.json --watch"
   },
   "keywords": [],
   "author": "",

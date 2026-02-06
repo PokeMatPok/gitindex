@@ -20,14 +20,21 @@
   "content_scripts": [
     {
       "matches": [
-        "https://github.com/*",
-        "https://*.github.com/*"
+        "https://github.com/search*"
       ],
       "css": [
         "styles/popup.css"
       ],
       "js": [
-        "compiled/popup.js"
+        "compiled/search.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://github.com/*/*"
+      ],
+      "js": [
+        "compiled/repo.js"
       ]
     }
   ]
