@@ -55,18 +55,6 @@ const getRepoPath = () =>
  * Find GitHub Languages section safely
  * ────────────────────────────── */
 
-function loadLanguageColors(): Promise<Map<string, { color: string }>> {
-    return fetch(chrome.runtime.getURL("assets/languages.json"))
-        .then(r => r.json())
-        .then((data: Record<string, { color: string }>) => {
-            const map = new Map<string, { color: string }>();
-            for (const [lang, meta] of Object.entries(data)) {
-                map.set(lang, { color: meta.color });
-            }
-            return map;
-        });
-}
-
 
 function findLanguagesSection(): HTMLElement | null {
     const headers = document.querySelectorAll(
@@ -236,7 +224,7 @@ function renderCanvas(canvas: HTMLCanvasElement) {
  * Init (PJAX safe)
  * ────────────────────────────── */
 
-async function init() {
+async function init(languageColors: Map<string, { color: string }>) {
     injectCSS();
     displayedLangs = [];
 
@@ -244,7 +232,7 @@ async function init() {
     if (!owner || !repo) return;
 
     const [langColors, repoLangs] = await Promise.all([
-        loadLanguageColors(),
+        Promise.resolve(languageColors),
         new GithubLanguagesRequest(owner, repo).fetch()
     ]);
 
@@ -274,11 +262,43 @@ async function init() {
 }
 
 /* ──────────────────────────────
- * Run + PJAX hook
+ * Exported for contentController
  * ────────────────────────────── */
 
-init();
-document.addEventListener("pjax:end", init);
+interface exportData {
+    mounted: boolean;
+    mount: (languagesGlobalIn: Map<string, { color: string }>) => void;
+    unmount: () => void;
+}
+
+export const repoModule: exportData = {
+    mounted: false,
+    mount: (languagesGlobalIn: Map<string, { color: string }>) => {
+        if (repoModule.mounted) {
+            console.warn("GitIndex: Repo module is already mounted.");
+            return;
+        }
+
+        init(languagesGlobalIn);
+        repoModule.mounted = true;
+    },
+    unmount: () => {
+        if (!repoModule.mounted) {
+            console.warn("GitIndex: Repo module is not mounted.");
+            return;
+        }
+
+        // prepare for unmounting
+        displayedLangs = [];
+        animationProgress = 0;
+        animationFinished = false;
+
+        document.querySelector("#gitindex-lang-div")?.remove();
+        document.querySelector("#gitindex-lang-button")?.remove();
+
+            repoModule.mounted = false;
+    }
+}
 
 
 

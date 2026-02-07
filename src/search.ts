@@ -1,11 +1,16 @@
 import { GithubRepoRequest } from "./api.js";
-import { hidePopup, populatePopup, registerPopupDiv } from "./popup.js";
+import { hidePopup, populatePopup, registerPopupDiv, type PopupFields } from "./popup.js";
 import type { GithubRepoResponse } from "./types/repo.js";
 
 // Regex to identify GitHub repository URLs 
 
 const searchRegex = /^https?:\/\/(.*\.)?github\.com\/.+\/.+/;
 const onsiteRegex = /^\/.+\/.+/;
+
+let popupDiv: {
+    element: HTMLDivElement;
+    fields: PopupFields;
+} | null = null;
 
 // Debounce/Cache settings
 
@@ -20,21 +25,6 @@ let dataCache = new Map<string, GithubRepoResponse>();
 let languages = new Map<string, {
     color: string;
 }>();
-fetch(chrome.runtime.getURL("assets/languages.json"))
-    .then(response => response.json())
-    .then(data => {
-        for (const [key, value] of Object.entries(data as unknown as Record<string, { color: string }>)) {
-            languages.set(key, { color: value.color });
-        }
-    });
-
-// Register popup div to populate later
-
-const popupDiv = registerPopupDiv();
-
-// Event listener for pointerenter to trigger hover
-
-document.addEventListener("pointerenter", handleHover, true);
 
 // Main hover handler
 
@@ -123,19 +113,70 @@ function handleHover(event: MouseEvent) {
     }, debounceTime);
 }
 
-// Observe mutations to identify navigation events (cuz GitHub is SPA)
+interface exportData {
+    mounted: boolean;
+    mount: (languagesGlobalIn: Map<string, { color: string }>) => void;
+    unmount: () => void;
+}
 
-const observer = new MutationObserver(() => {
-    hidePopup();
-    currentHoverToken++;
-});
-
-observer.observe(document.body, {
-    childList: true,
-    subtree: true
-});
+export const searchModule: exportData = {
+    mounted: false,
+    mount: (languagesGlobalIn: Map<string, { color: string }>) => {
+        languages = languagesGlobalIn;
 
 
+        if (searchModule.mounted) {
+            console.warn("GitIndex: Search module is already mounted.");
+            return;
+        }
+
+        // Observe mutations to identify navigation events (cuz GitHub is SPA)
+
+        const observer = new MutationObserver(() => {
+            hidePopup();
+            currentHoverToken++;
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
+        // Register popup div to populate later
+
+        if (!document.body) {
+            document.addEventListener("DOMContentLoaded", () => {
+                console.debug("GitIndex: DOMContentLoaded fired, registering popupDiv");
+                popupDiv = registerPopupDiv();
+            }, { once: true });
+        } else {
+            popupDiv = registerPopupDiv();
+        }
+
+
+        // Event listener for pointerenter to trigger hover
+
+        document.addEventListener("pointerenter", handleHover, true);
+
+        searchModule.mounted = true;
+    },
+    unmount: () => {
+
+        if (!searchModule.mounted) {
+            console.warn("GitIndex: Search module is not mounted.");
+            return;
+        }
+
+        // prepare for unmounting
+        document.removeEventListener("pointerenter", handleHover, true);
+
+        if (popupDiv) {
+            popupDiv.element.remove();
+            popupDiv = null;
+        }
+        searchModule.mounted = false;
+    },
+};
 
 
 

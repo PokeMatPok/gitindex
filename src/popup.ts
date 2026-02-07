@@ -80,7 +80,7 @@ function createLanguageItem(language: string, color_id: string, id: string): str
     `;
 }
 
-interface PopupFields {
+export interface PopupFields {
     repoOwnerAvatar: HTMLImageElement,
     repoName: HTMLElement,
     repoDescription: HTMLElement,
