@@ -1,2 +1,0 @@
-esbuild src/contentController.ts --bundle --format=iife --outfile=dist/compiled/contentController.js --tsconfig=tsconfig.json
-esbuild src/search.ts --bundle --format=iife --outfile=dist/compiled/search.js --tsconfig=tsconfig.json

@@ -1,3 +1,4 @@
+import { CONFIG, LOG } from "./config";
 import { repoModule } from "./repo";
 import { searchModule } from "./search";
 
@@ -36,13 +37,16 @@ function checkForNavigationChange() {
         loadLanguageColors().then((languages) => {
             const loader = matchURLLoader();
             if (loader) {
-                if (mountedModule && mountedModule !== loader) {
-                    console.log("GitIndex: Mounting module for current route...");
-                    mountedModule.unmount();
-                    loader.mount(languages);
-                    mountedModule = loader;
-                }
+                // remount even if the same module, as vDom might have changed
+                LOG.log("Route change detected, remounting module...");
+                mountedModule?.unmount();
+                loader.mount(languages);
+                mountedModule = loader;
+            } else if (mountedModule) {
+                mountedModule.unmount();
+                mountedModule = null;
             }
+
         });
     }
 }
@@ -50,11 +54,13 @@ function checkForNavigationChange() {
 function matchURLLoader(): Loader | null {
     const pathSegments = new URL(window.location.href).pathname.split("/").filter(Boolean);
 
+    const RESERVED_ROUTES = CONFIG.routes.reserved as readonly string[];
+
     if (pathSegments.length === 1 && pathSegments[0] === "search") {
         return searchModule;
     } else if (
-        pathSegments.length === 2 &&
-        !["topics", "sponsors", "settings"].includes(pathSegments[0] ?? "")
+        pathSegments.length >= 2 &&
+        !RESERVED_ROUTES.includes(pathSegments[0] ?? "")
     ) {
         return repoModule;
     }
@@ -65,22 +71,30 @@ function matchURLLoader(): Loader | null {
 
 
 function init() {
-    console.log("GitIndex: Initializing content script...");
+    LOG.log("Initializing content script...");
+    LOG.log("Logging is enabled. To disable, set CONFIG.logging.enabled = false in config.ts.");
     loadLanguageColors().then((languages) => {
-        const loader = matchURLLoader();
+        checkForNavigationChange();
 
-        currentRoute = location.href;
-
-        if (loader) {
-            if (mountedModule === null || mountedModule !== loader) {
-                console.log("GitIndex: Mounting initial module for current route...");
-                mountedModule?.unmount();
-                loader.mount(languages);
-                mountedModule = loader;
-            }
+        // Listen for URL changes (for SPA navigation)
+        if (!(history as any).__gitIndexPatched) {
+            const originalPush = history.pushState;
+            history.pushState = function (...args) {
+                originalPush.apply(this, args);
+                checkForNavigationChange();
+            };
+            (history as any).__gitIndexPatched = true;
         }
 
-        setInterval(checkForNavigationChange, 1000);
+        window.addEventListener("popstate", checkForNavigationChange);
+        window.addEventListener("pjax:end", checkForNavigationChange);
+        document.addEventListener("turbo:load", checkForNavigationChange);
+
+        // polling fallback for any navigation changes that might be missed
+        if (CONFIG.navigation.backupPolling.enabled) {
+            LOG.log(`Backup polling enabled. Polling every ${CONFIG.navigation.backupPolling.intervalMs} ms.`);
+            setInterval(checkForNavigationChange, CONFIG.navigation.backupPolling.intervalMs);
+        }
     });
 };
 

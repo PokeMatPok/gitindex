@@ -1,4 +1,5 @@
 import { GithubRepoRequest } from "./api.js";
+import { CONFIG, LOG } from "./config.js";
 import { hidePopup, populatePopup, registerPopupDiv, type PopupFields } from "./popup.js";
 import type { GithubRepoResponse } from "./types/repo.js";
 
@@ -16,9 +17,7 @@ let popupDiv: {
 
 let debounceTime: number = 200; // MS
 let hoverTimer: number | null = null;
-
 let currentHoverToken: number = 0;
-
 let dataCache = new Map<string, GithubRepoResponse>();
 
 // Load languages.json for language colors
@@ -33,26 +32,21 @@ function handleHover(event: MouseEvent) {
     try {
         target = (event.target as Element | null)?.closest("a");
     } catch (e) {
-        console.log("%cGitIndex: %c %s %c\nNote: This Issue does not affect the extension's functionality.", "color: #F2C94C; font-weight: bold;", "color: red;", e, "color: white;");
+        LOG.warn("Error in handleHover:", e);
+        LOG.log("Note: This Issue likely does not affect the extension's functionality.");
         return;
     }
 
-
     if (!target) return;
-
-
 
     if (hoverTimer !== null) {
         clearTimeout(hoverTimer);
         hoverTimer = null;
     }
 
-
-
     hoverTimer = window.setTimeout(() => {
 
         hoverTimer = null;
-
 
         const token = ++currentHoverToken;
 
@@ -67,7 +61,7 @@ function handleHover(event: MouseEvent) {
 
         const isRepo =
             pathSegments.length === 2 &&
-            !["topics", "sponsors", "settings"].includes(pathSegments[0] ?? "");
+            !(CONFIG.routes.reserved as readonly string[]).includes(pathSegments[0] ?? "");
 
         if (isRepo && (searchRegex.test(url.href) || (url.hostname === "github.com" && onsiteRegex.test(url.pathname)))) {
             const res: Promise<GithubRepoResponse | null> = new Promise((resolve) => {
@@ -126,7 +120,7 @@ export const searchModule: exportData = {
 
 
         if (searchModule.mounted) {
-            console.warn("GitIndex: Search module is already mounted.");
+            LOG.warn("Search module is already mounted.");
             return;
         }
 
@@ -146,7 +140,7 @@ export const searchModule: exportData = {
 
         if (!document.body) {
             document.addEventListener("DOMContentLoaded", () => {
-                console.debug("GitIndex: DOMContentLoaded fired, registering popupDiv");
+                LOG.log("DOMContenLoaded fired, registering popupDiv");
                 popupDiv = registerPopupDiv();
             }, { once: true });
         } else {
@@ -163,7 +157,7 @@ export const searchModule: exportData = {
     unmount: () => {
 
         if (!searchModule.mounted) {
-            console.warn("GitIndex: Search module is not mounted.");
+            LOG.warn("Search module is not mounted.");
             return;
         }
 

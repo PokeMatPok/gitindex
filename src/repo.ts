@@ -1,4 +1,5 @@
 import { GithubLanguagesRequest } from "./api";
+import { LOG } from "./config";
 
 /* ──────────────────────────────
  * Constants
@@ -275,7 +276,7 @@ export const repoModule: exportData = {
     mounted: false,
     mount: (languagesGlobalIn: Map<string, { color: string }>) => {
         if (repoModule.mounted) {
-            console.warn("GitIndex: Repo module is already mounted.");
+            LOG.warn("Repo module is already mounted.");
             return;
         }
 
@@ -284,7 +285,7 @@ export const repoModule: exportData = {
     },
     unmount: () => {
         if (!repoModule.mounted) {
-            console.warn("GitIndex: Repo module is not mounted.");
+            LOG.warn("Repo module is not mounted.");
             return;
         }
 
