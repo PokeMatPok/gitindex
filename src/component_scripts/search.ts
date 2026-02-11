@@ -1,7 +1,8 @@
-import { GithubRepoRequest } from "./api.js";
-import { CONFIG, LOG } from "./config.js";
-import { hidePopup, populatePopup, registerPopupDiv, type PopupFields } from "./popup.js";
-import type { GithubRepoResponse } from "./types/repo.js";
+import { GithubRepoRequest } from "./../api";
+import { CONFIG, LOG } from "./../config";
+import { hidePopup, populatePopup, registerPopupDiv, type PopupFields } from "./search/popup";
+import type { loaderData } from "./../types/general";
+import type { GithubRepoResponse } from "./../types/repo";
 
 // Regex to identify GitHub repository URLs 
 
@@ -107,13 +108,7 @@ function handleHover(event: MouseEvent) {
     }, debounceTime);
 }
 
-interface exportData {
-    mounted: boolean;
-    mount: (languagesGlobalIn: Map<string, { color: string }>) => void;
-    unmount: () => void;
-}
-
-export const searchModule: exportData = {
+export const searchModule: loaderData = {
     mounted: false,
     mount: (languagesGlobalIn: Map<string, { color: string }>) => {
         languages = languagesGlobalIn;

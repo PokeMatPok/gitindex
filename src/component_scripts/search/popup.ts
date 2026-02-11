@@ -1,4 +1,4 @@
-import type { GithubRepoResponse } from "./types/repo";
+import type { GithubRepoResponse } from "../../types/repo";
 
 function createPopup(): HTMLDivElement {
     const popup = document.createElement('div');

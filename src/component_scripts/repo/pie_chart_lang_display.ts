@@ -1,5 +1,6 @@
-import { GithubLanguagesRequest } from "./api";
-import { LOG } from "./config";
+import { GithubLanguagesRequest } from "../../api";
+import { LOG } from "../../config";
+import type { loaderData } from "../../types/general";
 
 /* ──────────────────────────────
  * Constants
@@ -123,8 +124,8 @@ function renderUI(owner: string, repo: string) {
     const icon = document.createElement("img");
     icon.id = "gitindex-lang-icon";
     icon.src = chrome.runtime.getURL("assets/chart-pie.svg");
-    icon.style.width = "24px";
-    icon.style.height = "24px";
+    icon.style.width = "16px";
+    icon.style.height = "16px";
     icon.style.marginLeft = "8px";
 
     button.appendChild(icon);
@@ -154,8 +155,8 @@ function renderUI(owner: string, repo: string) {
 
         const dot = document.createElement("span");
         Object.assign(dot.style, {
-            width: "12px",
-            height: "12px",
+            width: "8px",
+            height: "8px",
             backgroundColor: lang.color,
             borderRadius: "50%",
             marginRight: "8px",
@@ -266,26 +267,20 @@ async function init(languageColors: Map<string, { color: string }>) {
  * Exported for contentController
  * ────────────────────────────── */
 
-interface exportData {
-    mounted: boolean;
-    mount: (languagesGlobalIn: Map<string, { color: string }>) => void;
-    unmount: () => void;
-}
-
-export const repoModule: exportData = {
+export const pieChartModule: loaderData = {
     mounted: false,
     mount: (languagesGlobalIn: Map<string, { color: string }>) => {
-        if (repoModule.mounted) {
-            LOG.warn("Repo module is already mounted.");
+        if (pieChartModule.mounted) {
+            LOG.warn("Pie chart module is already mounted.");
             return;
         }
 
         init(languagesGlobalIn);
-        repoModule.mounted = true;
+        pieChartModule.mounted = true;
     },
     unmount: () => {
-        if (!repoModule.mounted) {
-            LOG.warn("Repo module is not mounted.");
+        if (!pieChartModule.mounted) {
+            LOG.warn("Pie chart module is not mounted.");
             return;
         }
 
@@ -297,7 +292,7 @@ export const repoModule: exportData = {
         document.querySelector("#gitindex-lang-div")?.remove();
         document.querySelector("#gitindex-lang-button")?.remove();
 
-            repoModule.mounted = false;
+            pieChartModule.mounted = false;
     }
 }
 

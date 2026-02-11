@@ -1,16 +1,14 @@
 import { CONFIG, LOG } from "./config";
-import { repoModule } from "./repo";
-import { searchModule } from "./search";
+import { repoModule } from "./component_scripts/repo";
+import { searchModule } from "./component_scripts/search";
+import type { loaderData } from "./types/general";
+import { logoModule } from "./component_scripts/logo";
+import { Modal } from "./component_scripts/modal";
 
 let currentRoute: string = "";
 let languagesGlobal: Map<string, { color: string }> = new Map();
-let mountedModule: Loader | null = null;
-
-interface Loader {
-    mounted: boolean;
-    mount: (languagesGlobalIn: Map<string, { color: string }>) => void;
-    unmount: () => void;
-}
+let mountedModule: loaderData | null = null;
+let activeFeatureSet: string = "";
 
 function loadLanguageColors(): Promise<Map<string, { color: string }>> {
     if (languagesGlobal.size > 0) {
@@ -40,8 +38,9 @@ function checkForNavigationChange() {
                 // remount even if the same module, as vDom might have changed
                 LOG.log("Route change detected, remounting module...");
                 mountedModule?.unmount();
-                loader.mount(languages);
-                mountedModule = loader;
+                loader.module.mount(languages, CONFIG.features[loader.featureSet as keyof typeof CONFIG.features] ?? undefined);
+                mountedModule = loader.module;
+                activeFeatureSet = loader.featureSet;
             } else if (mountedModule) {
                 mountedModule.unmount();
                 mountedModule = null;
@@ -51,18 +50,18 @@ function checkForNavigationChange() {
     }
 }
 
-function matchURLLoader(): Loader | null {
+function matchURLLoader(): {module: loaderData, featureSet: string} | null {
     const pathSegments = new URL(window.location.href).pathname.split("/").filter(Boolean);
 
     const RESERVED_ROUTES = CONFIG.routes.reserved as readonly string[];
 
     if (pathSegments.length === 1 && pathSegments[0] === "search") {
-        return searchModule;
+        return {module: searchModule, featureSet: "search"};
     } else if (
         pathSegments.length >= 2 &&
         !RESERVED_ROUTES.includes(pathSegments[0] ?? "")
     ) {
-        return repoModule;
+        return {module: repoModule, featureSet: "repo"};
     }
 
 
@@ -85,6 +84,9 @@ function init() {
             };
             (history as any).__gitIndexPatched = true;
         }
+
+        logoModule.mount(languagesGlobal);
+        Modal.createModal();
 
         window.addEventListener("popstate", checkForNavigationChange);
         window.addEventListener("pjax:end", checkForNavigationChange);

@@ -1,0 +1,160 @@
+<svg width="160" height="160" viewBox="20 0 180 160" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Animations -->
+    <style>
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
+      }
+      
+      @keyframes blink {
+        0%, 90%, 100% { opacity: 1; }
+        95% { opacity: 0; }
+      }
+      
+      @keyframes sparkle {
+        0%, 100% { opacity: 0; transform: scale(0); }
+        50% { opacity: 1; transform: scale(1); }
+      }
+      
+      @keyframes glow {
+        0%, 100% { opacity: 0.6; }
+        50% { opacity: 1; }
+      }
+      
+      .floating-body { animation: float 3s ease-in-out infinite; }
+      .eye-pupil { animation: blink 4s infinite; }
+      .sparkle { animation: sparkle 2s ease-in-out infinite; }
+      .sparkle-2 { animation: sparkle 2s ease-in-out infinite 0.7s; }
+      .sparkle-3 { animation: sparkle 2s ease-in-out infinite 1.4s; }
+      .accent-glow { animation: glow 2s ease-in-out infinite; }
+    </style>
+    
+    <!-- Gradient for metallic look -->
+    <linearGradient id="metalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E1E4E8;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#C9D1D9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B1BAC4;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="darkMetal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B949E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6E7781;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  
+  <!-- Static shadow (doesn't move with float) -->
+  <ellipse cx="100" cy="150" rx="50" ry="12" fill="#1F2328" opacity="0.12"/>
+  
+  <!-- Main floating body group -->
+  <g class="floating-body" transform-origin="100 80">
+    
+    <!-- Back tentacles (flowing down and outward) -->
+    <g opacity="0.9">
+      <!-- Far left tentacle -->
+      <path d="M 70 85 Q 50 100 45 130 Q 43 145 48 155" 
+            stroke="url(#darkMetal)" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <path d="M 70 85 Q 50 100 45 130 Q 43 145 48 155" 
+            stroke="#8B949E" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.4"/>
+      
+      <!-- Left tentacle -->
+      <path d="M 80 90 Q 65 105 60 135 Q 58 148 63 157" 
+            stroke="url(#darkMetal)" stroke-width="11" fill="none" stroke-linecap="round"/>
+      <path d="M 80 90 Q 65 105 60 135 Q 58 148 63 157" 
+            stroke="#B1BAC4" stroke-width="9" fill="none" stroke-linecap="round" opacity="0.3"/>
+      
+      <!-- Right tentacle -->
+      <path d="M 120 90 Q 135 105 140 135 Q 142 148 137 157" 
+            stroke="url(#darkMetal)" stroke-width="11" fill="none" stroke-linecap="round"/>
+      <path d="M 120 90 Q 135 105 140 135 Q 142 148 137 157" 
+            stroke="#B1BAC4" stroke-width="9" fill="none" stroke-linecap="round" opacity="0.3"/>
+      
+      <!-- Far right tentacle -->
+      <path d="M 130 85 Q 150 100 155 130 Q 157 145 152 155" 
+            stroke="url(#darkMetal)" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <path d="M 130 85 Q 150 100 155 130 Q 157 145 152 155" 
+            stroke="#8B949E" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.4"/>
+      
+      <!-- Mechanical segments/joints on tentacles -->
+      <circle cx="58" cy="110" r="4" fill="#6E7781"/>
+      <circle cx="56" cy="140" r="3.5" fill="#6E7781"/>
+      <circle cx="142" cy="110" r="4" fill="#6E7781"/>
+      <circle cx="144" cy="140" r="3.5" fill="#6E7781"/>
+      
+      <!-- Accent lights on segments -->
+      <circle cx="58" cy="110" r="2" fill="#1F6FEB" class="accent-glow"/>
+      <circle cx="142" cy="110" r="2" fill="#1F6FEB" class="accent-glow"/>
+    </g>
+    
+    <!-- Main head/body dome -->
+    <ellipse cx="100" cy="70" rx="45" ry="38" fill="url(#metalGrad)"/>
+    
+    <!-- Top dome panel -->
+    <ellipse cx="100" cy="55" rx="38" ry="28" fill="url(#darkMetal)" opacity="0.3"/>
+    <ellipse cx="100" cy="52" rx="35" ry="25" fill="#E1E4E8" opacity="0.4"/>
+    
+    <!-- Front tentacles draped over edge -->
+    <g opacity="0.95">
+      <!-- Front left tentacle -->
+      <path d="M 85 88 Q 75 95 72 115 Q 71 128 76 140" 
+            stroke="url(#metalGrad)" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <path d="M 85 88 Q 75 95 72 115 Q 71 128 76 140" 
+            stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5"/>
+      
+      <!-- Front right tentacle -->
+      <path d="M 115 88 Q 125 95 128 115 Q 129 128 124 140" 
+            stroke="url(#metalGrad)" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <path d="M 115 88 Q 125 95 128 115 Q 129 128 124 140" 
+            stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5"/>
+      
+      <!-- Segments on front tentacles -->
+      <circle cx="77" cy="100" r="4" fill="#6E7781"/>
+      <circle cx="74" cy="122" r="3.5" fill="#6E7781"/>
+      <circle cx="123" cy="100" r="4" fill="#6E7781"/>
+      <circle cx="126" cy="122" r="3.5" fill="#6E7781"/>
+    </g>
+    
+    <!-- Sensor antenna on top -->
+    <line x1="100" y1="35" x2="100" y2="22" stroke="#8B949E" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="100" cy="20" r="5" fill="#1F6FEB"/>
+    <circle cx="100" cy="20" r="7" fill="#1F6FEB" opacity="0.3" class="accent-glow"/>
+    
+    <!-- Eyes (large, positioned like sketch) -->
+    <g>
+      <!-- Left eye -->
+      <ellipse cx="80" cy="65" rx="10" ry="12" fill="#2D333B"/>
+      <ellipse cx="80" cy="65" rx="7" ry="9" fill="#1F6FEB" class="eye-pupil"/>
+      <ellipse cx="82" cy="62" rx="3" ry="4" fill="#FFFFFF"/>
+      
+      <!-- Right eye -->
+      <ellipse cx="120" cy="65" rx="10" ry="12" fill="#2D333B"/>
+      <ellipse cx="120" cy="65" rx="7" ry="9" fill="#1F6FEB" class="eye-pupil"/>
+      <ellipse cx="122" cy="62" rx="3" ry="4" fill="#FFFFFF"/>
+    </g>
+    
+    <!-- Mecha vent mouth -->
+    <rect x="88" y="80" width="24" height="6" rx="2" fill="#2D333B" opacity="0.5"/>
+    <line x1="90" y1="81" x2="90" y2="85" stroke="#6E7781" stroke-width="1.5"/>
+    <line x1="95" y1="81" x2="95" y2="85" stroke="#6E7781" stroke-width="1.5"/>
+    <line x1="100" y1="81" x2="100" y2="85" stroke="#6E7781" stroke-width="1.5"/>
+    <line x1="105" y1="81" x2="105" y2="85" stroke="#6E7781" stroke-width="1.5"/>
+    <line x1="110" y1="81" x2="110" y2="85" stroke="#6E7781" stroke-width="1.5"/>
+    
+    <!-- Side panels/details -->
+    <circle cx="58" cy="68" r="5" fill="#6E7781"/>
+    <circle cx="58" cy="68" r="3" fill="#1F6FEB" opacity="0.7"/>
+    <circle cx="142" cy="68" r="5" fill="#6E7781"/>
+    <circle cx="142" cy="68" r="3" fill="#1F6FEB" opacity="0.7"/>
+    
+    <!-- Panel lines for detail -->
+    <path d="M 70 50 Q 100 48 130 50" stroke="#6E7781" stroke-width="1" fill="none" opacity="0.5"/>
+    <path d="M 65 70 Q 100 68 135 70" stroke="#6E7781" stroke-width="1" fill="none" opacity="0.5"/>
+  </g>
+  
+  <!-- Sparkles around the mascot -->
+  <circle class="sparkle sparkle-1" cx="35" cy="50" r="3" fill="#F778BA"/>
+  <circle class="sparkle sparkle-2" cx="165" cy="60" r="2.5" fill="#79C0FF"/>
+  <circle class="sparkle sparkle-3" cx="50" cy="90" r="2" fill="#FFA657"/>
+  
+</svg>

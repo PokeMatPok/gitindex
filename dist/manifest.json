@@ -6,7 +6,7 @@
     }
   },
   "name": "Gitindex",
-  "description": "",
+  "description": "Ever wished that using GitHub was as seamless as using your local IDE? Gitindex brings the power of your IDE to GitHub, allowing you to edit files directly on the platform with the same ease and efficiency as you would on your local machine.",
   "version": "1.0",
   "manifest_version": 3,
   "action": {
@@ -30,7 +30,10 @@
         "https://github.com/*/*"
       ],
       "css": [
-        "styles/popup.css"
+        "styles/popup.css",
+        "styles/repo.css",
+        "styles/logo.css",
+        "styles/modal.css"
       ],
       "js": [
         "content.js"

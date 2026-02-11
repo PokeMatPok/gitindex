@@ -1,0 +1,10 @@
+.gitindex-logo {
+    width: 2rem;
+    height: 2rem;
+    min-width: unset;
+}
+
+.gitindex-logo svg {
+    width: auto;
+    height: 2rem;
+}

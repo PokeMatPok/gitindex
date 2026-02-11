@@ -1,0 +1,50 @@
+.gitindex-edit-button {
+    background-color: #212830;
+    color: #f0f6fc;
+    appearance: none;
+    border: .0625rem solid #3d444d;
+    cursor: pointer;
+    font-size: .875rem;
+    font-weight: 500;
+    height: 2rem;
+    min-width: max-content;
+    padding: 0 .75rem;
+    text-align: center;
+    transition: color 80ms cubic-bezier(.65, 0, .35, 1), fill 80ms cubic-bezier(.65, 0, .35, 1), background-color 80ms cubic-bezier(.65, 0, .35, 1), border-color 80ms cubic-bezier(.65, 0, .35, 1);
+    border-radius: .375rem;
+}
+
+.gitindex-edit-button:hover {
+    background-color: #262c36;
+    border-color: #3d444d;
+}
+
+.gitindex-edit-modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.gitindex-edit-option {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    background-color: #0d1117;
+    color: #c9d1d9;
+    appearance: none;
+    border: .0625rem solid #3d444d;
+    padding: .5rem 1rem;
+    border-radius: .375rem;
+    transition: color 80ms cubic-bezier(.65, 0, .35, 1), fill 80ms cubic-bezier(.65, 0, .35, 1), background-color 80ms cubic-bezier(.65, 0, .35, 1), border-color 80ms cubic-bezier(.65, 0, .35, 1);
+}
+
+.gitindex-edit-option .gitindex-edit-option-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.75rem;
+}
+
+.gitindex-edit-option:hover {
+    background-color: #121820;
+    border: .0625rem solid #444c57;
+}

@@ -23,12 +23,27 @@ export const CONFIG = {
     },
 
     features: {
-        hoverPopups: true,
-        languageCharts: true,
-        fileActions: true,
-        themes: true
+        logo: new Map([
+            ["gitindex-logo-header", {
+                displayName: "GitIndex Logo in Header",
+                description: "Injects the GitIndex mascot into the GitHub header for branding.",
+                enabled: true
+            }]
+        ]),
+        repo: new Map([
+            ["pie_chart_lang_display", {
+                displayName: "Pie Chart Language Display",
+                description: "Adds additional pie chart visualization for repository languages.",
+                enabled: true
+            }],
+            ["edit_button", {
+                displayName: "Edit Button",
+                description: "Adds an edit button to repository pages for quick access to editing.",
+                enabled: true
+            }]
+        ])
     }
-} as const;
+};
 
 
 type LogLevel = "log" | "info" | "warn" | "error";
