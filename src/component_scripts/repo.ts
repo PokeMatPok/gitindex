@@ -2,6 +2,7 @@ import { LOG } from "../config";
 import { type loaderData, type feature } from "../types/general";
 import { editButtonModule } from "./repo/edit_button";
 import { pieChartModule } from "./repo/pie_chart_lang_display";
+import { quickActionsModule } from "./repo/quick_actions";
 
 export const repoModule: loaderData = {
     mounted: false,
@@ -18,6 +19,10 @@ export const repoModule: loaderData = {
             editButtonModule.mount(languagesGlobalIn);
         }
 
+        if (featureSet?.get("file_hover_quick_actions") && !quickActionsModule.mounted) {
+            quickActionsModule.mount(languagesGlobalIn);
+        }
+
         repoModule.mounted = true;
     },
     unmount: () => {
@@ -32,6 +37,10 @@ export const repoModule: loaderData = {
 
         if (editButtonModule.mounted) {
             editButtonModule.unmount();
+        }
+
+        if (quickActionsModule.mounted) {
+            quickActionsModule.unmount();
         }
 
         repoModule.mounted = false;

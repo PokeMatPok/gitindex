@@ -1,4 +1,5 @@
 import esbuild from "esbuild";
+import { copy } from 'esbuild-plugin-copy';
 
 const isProd = process.argv.includes("--prod");
 const isWatch = process.argv.includes("--watch");
@@ -10,7 +11,7 @@ const options = {
   bundle: true,
   format: "iife",
   target: ["chrome110"],
-  outfile: "dist/content.js",
+  outfile: "dist/scripts/content.js",
 
   minify: isProd,
   sourcemap: isProd ? false : "inline",
@@ -26,6 +27,16 @@ const options = {
   drop: isProd ? ["console"] : [],
 
   logLevel: "info",
+  plugins: [
+    copy({
+      resolveFrom: 'cwd',
+      assets: {
+        from: ['public/**/*'],
+        to: ['dist']
+      },
+      watch: isWatch
+    })
+  ]
 };
 
 if (isWatch) {

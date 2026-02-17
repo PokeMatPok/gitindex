@@ -1,5 +1,8 @@
 import { LOG } from "../config";
 import type { loaderData } from "../types/general";
+import { DOMWatcher } from "./utils";
+
+let observing: boolean = false;
 
 function findGitHubLogo(): HTMLElement | null {
     const GHlogo = document.getElementsByClassName("octicon-mark-github")[0];
@@ -27,18 +30,27 @@ function injectLogo() {
         return;
     }
 
-    if (logo.parentElement) {
-        logo.parentElement.style.width = "auto";
-        logo.parentElement.style.borderRadius = "30px";
+    if (document.querySelector(".gitindex-logo")) {
+        return;
     }
 
     const GitIndexLogo = document.createElement("div");
+    GitIndexLogo.className = "gitindex-logo";
+
+    DOMWatcher.runSilent(() => {
+        if (logo.parentElement) {
+            logo.parentElement.style.width = "auto";
+            logo.parentElement.style.borderRadius = "30px";
+        }
+        logo.after(GitIndexLogo);
+    });
+
     fetchGitIndexLogoSVG().then(svgText => {
         if (svgText) {
-            GitIndexLogo.innerHTML = svgText;
+            DOMWatcher.runSilent(() => {
+                GitIndexLogo.innerHTML = svgText;
+            });
         }
-        GitIndexLogo.className = "gitindex-logo";
-        logo.after(GitIndexLogo);
     });
 
 }
@@ -49,6 +61,15 @@ export const logoModule: loaderData = {
         if (logoModule.mounted) {
             LOG.warn("Logo module is already mounted.");
             return;
+        }
+
+        if (!observing) {
+            DOMWatcher.appendCallback("logoWatcher", () => {
+                if (!document.querySelector(".gitindex-logo")) {
+                    injectLogo();
+                }
+            });
+            observing = true;
         }
 
         injectLogo();
@@ -62,6 +83,9 @@ export const logoModule: loaderData = {
         }
 
         document.querySelectorAll(".gitindex-logo").forEach(el => el.remove());
+
+        DOMWatcher.removeCallback("logoWatcher");
+        observing = false;
 
         logoModule.mounted = false;
     }

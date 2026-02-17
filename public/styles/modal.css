@@ -1,0 +1,100 @@
+.gitindex-modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 9998;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Modal container, child supplied dimensions */
+.gitindex-modal {
+    border: .0625rem solid #3d444d;
+    border-radius: .375rem;
+    font-size: 14px;
+    font-weight: 400;
+    z-index: 9999;
+    background-color: #0d1117;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 300px;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: auto;
+}
+
+/* Header (title and close button) */
+.gitindex-modal-header {
+    padding-top: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    align-items: center;
+    border-bottom: .0625rem solid #21262d;
+    display: flex;
+    font-size: 14px;
+    padding: .4rem .5rem;
+}
+
+.gitindex-modal-title {
+    color: #c9d1d9;
+    font-size: 16px;
+}
+
+.gitindex-modal-content {
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.gitindex-modal-close-button {
+    background: none;
+    border: none;
+    color: #c9d1d9;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    padding: 0;
+    margin-left: auto;
+}
+
+
+.gitindex-modal-close-button:hover {
+    color: #f0f6fc;
+}
+
+.gitindex-modal-hidden {
+    display: none;
+}
+
+.gitindex-modal-skeleton {
+    background: linear-gradient(90deg, #21262d 25%, #30363d 50%, #21262d 75%);
+    background-size: 200% 100%;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.gitindex-modal-skeleton-inv {
+    background: linear-gradient(90deg, #21262d 25%, #30363d 50%, #21262d 75%);
+    background-size: 200% 100%;
+    animation: pulse 1.5s ease-in-out infinite 0.75s;
+}
+
+@keyframes pulse {
+    0% {
+        background-position: 0 0;
+    }
+
+    50% {
+        background-position: 100% 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}

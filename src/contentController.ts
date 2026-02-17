@@ -4,11 +4,11 @@ import { searchModule } from "./component_scripts/search";
 import type { loaderData } from "./types/general";
 import { logoModule } from "./component_scripts/logo";
 import { Modal } from "./component_scripts/modal";
+import { DOMWatcher } from "./component_scripts/utils";
 
 let currentRoute: string = "";
 let languagesGlobal: Map<string, { color: string }> = new Map();
 let mountedModule: loaderData | null = null;
-let activeFeatureSet: string = "";
 
 function loadLanguageColors(): Promise<Map<string, { color: string }>> {
     if (languagesGlobal.size > 0) {
@@ -40,7 +40,6 @@ function checkForNavigationChange() {
                 mountedModule?.unmount();
                 loader.module.mount(languages, CONFIG.features[loader.featureSet as keyof typeof CONFIG.features] ?? undefined);
                 mountedModule = loader.module;
-                activeFeatureSet = loader.featureSet;
             } else if (mountedModule) {
                 mountedModule.unmount();
                 mountedModule = null;
@@ -75,6 +74,10 @@ function init() {
     loadLanguageColors().then((languages) => {
         checkForNavigationChange();
 
+        DOMWatcher.appendCallback("routeChangeWatcher", () => {
+            checkForNavigationChange();
+        });
+
         // Listen for URL changes (for SPA navigation)
         if (!(history as any).__gitIndexPatched) {
             const originalPush = history.pushState;
@@ -85,7 +88,7 @@ function init() {
             (history as any).__gitIndexPatched = true;
         }
 
-        logoModule.mount(languagesGlobal);
+        logoModule.mount(languages);
         Modal.createModal();
 
         window.addEventListener("popstate", checkForNavigationChange);

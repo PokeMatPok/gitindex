@@ -1,8 +1,10 @@
 import { LOG } from "../../config";
 import type { loaderData } from "../../types/general";
 import { Modal } from "../modal";
+import { DOMWatcher } from "../utils";
 
 let ModalInitialized = false;
+let observing: boolean = false;
 
 function findInjectPoint(): HTMLElement[] | null {
     const spans = document.querySelectorAll("span");
@@ -107,6 +109,11 @@ function injectRepoButton() {
         return;
     }
 
+    if (document.querySelector(".gitindex-edit-button")) {
+        return;
+    }
+
+
     const editButton = document.createElement("button");
     editButton.className = "gitindex-edit-button";
     editButton.onclick = (e: MouseEvent) => handleEditClick(e);
@@ -115,8 +122,9 @@ function injectRepoButton() {
     ButtonText.textContent = "Edit with IDE";
     editButton.appendChild(ButtonText);
 
-    injectionPoints.filter(Boolean)[0]?.after(editButton);
-
+    DOMWatcher.runSilent(() => {
+        injectionPoints[0]?.after(editButton);
+    });
 }
 
 const handleEditClick = (e: MouseEvent) => {
@@ -148,27 +156,23 @@ export const editButtonModule: loaderData = {
             return;
         }
 
-        const ReInjector = new MutationObserver(() => {
-            if (!document.querySelector(".gitindex-edit-button")) {
-                LOG.log("Edit button not found, reinjecting...");
-                injectRepoButton();
-            }
-        });
+        if (!observing) {
+            DOMWatcher.appendCallback("editButtonWatcher", (mutations) => {
+                const buttonExists = document.querySelector(".gitindex-edit-button");
+                const injectionPointExists = findInjectPoint();
 
-        const InjectPoint = findInjectPoint()?.filter(Boolean)[0];
-
-        if (InjectPoint) {
-            ReInjector.observe(InjectPoint, {
-                childList: true,
-                subtree: true
+                if (!buttonExists && injectionPointExists) {
+                    LOG.log("Edit button removed by GitHub, reinjecting...");
+                    setTimeout(() => {
+                        injectRepoButton();
+                    }, 100);
+                }
             });
-        } else {
-            LOG.warn("Edit button reinjection failed due to missing injection point.");
+
+            observing = true;
         }
 
-        setTimeout(() => {
-            injectRepoButton();
-        }, 500);
+        injectRepoButton();
 
         editButtonModule.mounted = true;
     },
@@ -177,6 +181,16 @@ export const editButtonModule: loaderData = {
             LOG.warn("Edit button module is not mounted.");
             return;
         }
+
+        DOMWatcher.removeCallback("editButtonWatcher");
+
+        DOMWatcher.runSilent(() => {
+            const button = document.querySelector(".gitindex-edit-button");
+            button?.remove();
+        });
+
+        DOMWatcher.removeCallback("editButtonWatcher");
+        observing = false;
 
         Modal.destroy();
         ModalInitialized = false;
