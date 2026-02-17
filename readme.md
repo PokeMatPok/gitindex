@@ -52,10 +52,11 @@ The framework is fully modular: each page (e.g. repository view, search results)
 
 ## Roadmap
 
+- Config via Action widow at the top
+- Favorites selection for File quick actions
 - User-configurable preferred IDE (one-click open)
-- GitLab support
-- Bitbucket support
-- More file hover actions
+- More file quick actions
+- GitLab/Bitbucket support
 
 ## Contributing
 
