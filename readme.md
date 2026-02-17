@@ -1,3 +1,4 @@
+![Gitindex banner](/demo/banner.png)
 # GitIndex
 
 A browser extension that enhances GitHub's UI with quality-of-life features, not aiming to fix everything, but do the things that it does right.
