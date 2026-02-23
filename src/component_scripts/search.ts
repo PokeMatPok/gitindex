@@ -1,11 +1,11 @@
 import { GithubRepoRequest } from "./../api";
 import { CONFIG, LOG } from "./../config";
-import { hidePopup, populatePopup, registerPopupDiv, type PopupFields } from "./search/popup";
+import {hidePopup, populatePopup, registerPopupDiv, type PopupFields } from "./search/popup";
 import type { loaderData } from "./../types/general";
 import type { GithubRepoResponse } from "./../types/repo";
+import { DOMWatcher } from "./utils";
 
 // Regex to identify GitHub repository URLs 
-
 const searchRegex = /^https?:\/\/(.*\.)?github\.com\/.+\/.+/;
 const onsiteRegex = /^\/.+\/.+/;
 
@@ -39,6 +39,8 @@ function handleHover(event: MouseEvent) {
     }
 
     if (!target) return;
+
+    
 
     if (hoverTimer !== null) {
         clearTimeout(hoverTimer);
@@ -121,16 +123,10 @@ export const searchModule: loaderData = {
 
         // Observe mutations to identify navigation events (cuz GitHub is SPA)
 
-        const observer = new MutationObserver(() => {
+        DOMWatcher.appendCallback("searchModule", () => {
             hidePopup();
             currentHoverToken++;
         });
-
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
-
         // Register popup div to populate later
 
         if (!document.body) {
@@ -143,9 +139,9 @@ export const searchModule: loaderData = {
         }
 
 
-        // Event listener for pointerenter to trigger hover
+        // Event listener for mouseover to trigger hover
 
-        document.addEventListener("pointerenter", handleHover, true);
+        document.addEventListener("mouseover", handleHover, true);
 
         searchModule.mounted = true;
     },
@@ -157,7 +153,7 @@ export const searchModule: loaderData = {
         }
 
         // prepare for unmounting
-        document.removeEventListener("pointerenter", handleHover, true);
+        document.removeEventListener("mouseover", handleHover, true);
 
         if (popupDiv) {
             popupDiv.element.remove();

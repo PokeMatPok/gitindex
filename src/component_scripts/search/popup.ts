@@ -1,4 +1,5 @@
 import type { GithubRepoResponse } from "../../types/repo";
+import { DOMWatcher } from "../utils";
 
 function createPopup(): HTMLDivElement {
     const popup = document.createElement('div');
@@ -103,8 +104,12 @@ function registerPopupDiv(): {
 } {
 
     const popup = createPopup();
-    document.body.appendChild(popup);
-    popup.style.display = 'none';
+
+    DOMWatcher.runSilent(() => {
+        document.body.appendChild(popup);
+
+        popup.style.display = 'none';
+    });
 
     return {
         element: popup, fields: {
@@ -135,34 +140,38 @@ function populatePopup(popup: { element: HTMLDivElement, fields: PopupFields }, 
         if (!repoData) return;
 
         // Populate popup fields
-        popup.fields.repoOwnerAvatar.src = repoData.owner.avatar_url;
-        popup.fields.repoName.textContent = repoData.full_name;
-        popup.fields.repoDescription.textContent = repoData.description || 'No description';
-        popup.fields.repoOwner.textContent = repoData.owner.login;
-        popup.fields.statStars.textContent = repoData.stargazers_count.toString();
-        popup.fields.statForks.textContent = repoData.forks_count.toString();
-        popup.fields.statIssues.textContent = repoData.open_issues_count.toString();
-        popup.fields.itemCreated.textContent = new Date(repoData.created_at).toLocaleDateString();
-        popup.fields.itemUpdated.textContent = new Date(repoData.updated_at).toLocaleDateString();
-        popup.fields.itemWatchers.textContent =
-            (repoData.subscribers_count ?? 0).toString();
-        popup.fields.itemSize.textContent = repoData.formatted_size || 'Unknown';
-        popup.fields.itemLicense.textContent = repoData.license ? repoData.license.name : 'No license';
-        popup.fields.itemLanguage.textContent = repoData.language || 'Unknown';
-        popup.fields.itemLanguageColor.style.backgroundColor = repoData.language_color || 'transparent';
+        DOMWatcher.runSilent(() => {
+            popup.fields.repoOwnerAvatar.src = repoData.owner.avatar_url;
+            popup.fields.repoName.textContent = repoData.full_name;
+            popup.fields.repoDescription.textContent = repoData.description || 'No description';
+            popup.fields.repoOwner.textContent = repoData.owner.login;
+            popup.fields.statStars.textContent = repoData.stargazers_count.toString();
+            popup.fields.statForks.textContent = repoData.forks_count.toString();
+            popup.fields.statIssues.textContent = repoData.open_issues_count.toString();
+            popup.fields.itemCreated.textContent = new Date(repoData.created_at).toLocaleDateString();
+            popup.fields.itemUpdated.textContent = new Date(repoData.updated_at).toLocaleDateString();
+            popup.fields.itemWatchers.textContent =
+                (repoData.subscribers_count ?? 0).toString();
+            popup.fields.itemSize.textContent = repoData.formatted_size || 'Unknown';
+            popup.fields.itemLicense.textContent = repoData.license ? repoData.license.name : 'No license';
+            popup.fields.itemLanguage.textContent = repoData.language || 'Unknown';
+            popup.fields.itemLanguageColor.style.backgroundColor = repoData.language_color || 'transparent';
 
 
-        const rect = link.getBoundingClientRect();
-        popup.element.style.top = `${rect.bottom + window.scrollY + 8}px`;
-        popup.element.style.left = `${rect.left + window.scrollX}px`;
-        popup.element.style.display = 'block';
+            const rect = link.getBoundingClientRect();
+            popup.element.style.top = `${rect.bottom + window.scrollY + 8}px`;
+            popup.element.style.left = `${rect.left + window.scrollX}px`;
+            popup.element.style.display = 'block';
+        });
     });
 }
 
 function hidePopup() {
     const popup = document.querySelector('.gitindex-main-popup-view') as HTMLDivElement;
     if (popup) {
-        popup.style.display = 'none';
+        DOMWatcher.runSilent(() => {
+            popup.style.display = 'none';
+        });
     }
 }
 

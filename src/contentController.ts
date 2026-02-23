@@ -10,6 +10,14 @@ let currentRoute: string = "";
 let languagesGlobal: Map<string, { color: string }> = new Map();
 let mountedModule: loaderData | null = null;
 
+function isExtensionContextValid(): boolean {
+    try {
+        return !!chrome.runtime?.id;
+    } catch {
+        return false;
+    }
+}
+
 function loadLanguageColors(): Promise<Map<string, { color: string }>> {
     if (languagesGlobal.size > 0) {
         return Promise.resolve(languagesGlobal);
@@ -31,6 +39,13 @@ function loadLanguageColors(): Promise<Map<string, { color: string }>> {
 
 function checkForNavigationChange() {
     if (location.href !== currentRoute) {
+
+        if (!isExtensionContextValid()) {
+            LOG.error("Invalid extension context. Aborting route change handling.");
+            window.location.reload();
+            return;
+        }
+
         currentRoute = location.href;
         loadLanguageColors().then((languages) => {
             const loader = matchURLLoader();
@@ -49,18 +64,18 @@ function checkForNavigationChange() {
     }
 }
 
-function matchURLLoader(): {module: loaderData, featureSet: string} | null {
+function matchURLLoader(): { module: loaderData, featureSet: string } | null {
     const pathSegments = new URL(window.location.href).pathname.split("/").filter(Boolean);
 
     const RESERVED_ROUTES = CONFIG.routes.reserved as readonly string[];
 
     if (pathSegments.length === 1 && pathSegments[0] === "search") {
-        return {module: searchModule, featureSet: "search"};
+        return { module: searchModule, featureSet: "search" };
     } else if (
         pathSegments.length >= 2 &&
         !RESERVED_ROUTES.includes(pathSegments[0] ?? "")
     ) {
-        return {module: repoModule, featureSet: "repo"};
+        return { module: repoModule, featureSet: "repo" };
     }
 
 
@@ -70,6 +85,14 @@ function matchURLLoader(): {module: loaderData, featureSet: string} | null {
 
 function init() {
     LOG.log("Initializing content script...");
+
+    LOG.log("Checking extension context...");
+    if (!isExtensionContextValid()) {
+        LOG.error("Invalid extension context. This page might be incompatible with the extension. Reloading...");
+        window.location.reload();
+        return;
+    }
+
     LOG.log("Logging is enabled. To disable, set CONFIG.logging.enabled = false in config.ts.");
     loadLanguageColors().then((languages) => {
         checkForNavigationChange();
