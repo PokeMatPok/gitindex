@@ -1,6 +1,7 @@
 import { GithubLanguagesRequest } from "../../api";
 import { LOG } from "../../config";
 import type { loaderData } from "../../types/general";
+import { DOMWatcher } from "../utils";
 
 /* ──────────────────────────────
  * Constants
@@ -23,6 +24,9 @@ let displayedLangs: {
 
 let animationProgress = 0;
 let animationFinished = false;
+let animationGen = 0;
+
+let globCanvas: HTMLCanvasElement | undefined;
 
 /* ──────────────────────────────
  * Inject CSS once
@@ -76,16 +80,18 @@ function findLanguagesSection(): HTMLElement | null {
  * ────────────────────────────── */
 
 function toggleLangView() {
+  LOG.log("lang view toggled")
+
     const langDiv = document.getElementById("gitindex-lang-div");
     const icon = document.getElementById("gitindex-lang-icon") as HTMLImageElement;
     const section = findLanguagesSection();
 
-    if (!langDiv || !icon || !section) return;
+    if (!langDiv || !icon || !section) return LOG.log(`toggle aborted; langDiv: ${!!langDiv} icon: ${!!icon} section: ${!!section}`);
 
     const barGraphic = section.querySelector<HTMLDivElement>("div.mb-2");
-    const barList = section.querySelector<HTMLUListElement>("ul.list-style-none");
+    const barList = section.querySelector<HTMLUListElement>("ul.SidebarLanguages-module__languageList__R3aIa");
 
-    if (!barGraphic || !barList) return;
+    if (!barGraphic || !barList) return LOG.log(`toggle aborted; barGraphic: ${!!barGraphic} barList: ${!!barList}`);
 
     const pieHidden = langDiv.classList.contains("gitindex-hidden");
 
@@ -96,6 +102,10 @@ function toggleLangView() {
     icon.src = chrome.runtime.getURL(
         pieHidden ? "assets/chart-bar.svg" : "assets/chart-pie.svg"
     );
+
+    if (pieHidden && globCanvas) {
+      renderCanvas(globCanvas);
+    }
 }
 
 /* ──────────────────────────────
@@ -180,7 +190,9 @@ function renderUI(owner: string, repo: string) {
     }
 
     langDiv.append(canvas, list);
-    header.after(langDiv);
+  header.after(langDiv);
+
+  globCanvas = canvas;
 
     renderCanvas(canvas);
 }
@@ -192,20 +204,28 @@ function renderUI(owner: string, repo: string) {
 function renderCanvas(canvas: HTMLCanvasElement) {
     const ctx = canvas.getContext("2d")!;
     animationProgress = 0;
-    animationFinished = false;
+  animationFinished = false;
 
-    function frame() {
+  const generation = ++animationGen;
+
+  function frame() {
+    if (generation !== animationGen) return;
+
         ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-        let angle = 0;
+      let angle = 0;
+      let maxAngle = animationProgress * 3.6; // degree 0 to 360 for reveal animation
 
-        for (const lang of displayedLangs) {
-            const slice = degreeToRadiant(lang.percent * 3.6);
+      for (const lang of displayedLangs) {
+        if (angle < maxAngle) {
+          let lang_angle = Math.min(lang.percent * 3.6, 100);
+            const slice = degreeToRadiant(maxAngle - angle < lang_angle ? maxAngle - angle : lang_angle);
             ctx.fillStyle = lang.color;
             ctx.beginPath();
             ctx.moveTo(CENTER, CENTER);
-            ctx.arc(CENTER, CENTER, 480, angle, angle + slice);
+            ctx.arc(CENTER, CENTER, 480, degreeToRadiant(angle), degreeToRadiant(angle) + slice);
             ctx.fill();
-            angle += slice;
+          angle += lang_angle;
+        }
         }
 
         ctx.fillStyle = BG_COLOR;
@@ -275,8 +295,22 @@ export const pieChartModule: loaderData = {
             return;
         }
 
-        init(languagesGlobalIn);
-        pieChartModule.mounted = true;
+      DOMWatcher.runSilent(() => init(languagesGlobalIn));
+
+      DOMWatcher.appendCallback("langPieChartwatcher", () => {
+        const langSection = findLanguagesSection();
+        const elementsPresent = langSection?.querySelector("#gitindex-lang-div") && langSection?.querySelector("#gitindex-lang-button");
+
+        if (!elementsPresent) {
+
+          const [owner, repo] = getRepoPath();
+          if (!owner || !repo) return;
+
+          renderUI(owner, repo)
+        }
+      })
+
+      pieChartModule.mounted = true;
     },
     unmount: () => {
         if (!pieChartModule.mounted) {
