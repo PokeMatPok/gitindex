@@ -1,7 +1,7 @@
 ![Gitindex banner](/demo/banner.png)
 # GitIndex
 
-![AMO version](https://img.shields.io/amo/v/mtthsschrbr.gitindex%40example.com)(https://addons.mozilla.org/en-US/firefox/addon/gitindex/)
+[![AMO version](https://img.shields.io/amo/v/mtthsschrbr.gitindex%40example.com)](https://addons.mozilla.org/en-US/firefox/addon/gitindex/)
 
 A browser extension that enhances GitHub's UI with quality-of-life features, not aiming to fix everything, but do the things that it does right.
 
