@@ -5,9 +5,9 @@ import type { loaderData } from "./../types/general";
 import type { GithubRepoResponse } from "./../types/repo";
 import { DOMWatcher } from "./utils";
 
-// Regex to identify GitHub repository URLs 
-const searchRegex = /^https?:\/\/(.*\.)?github\.com\/.+\/.+/;
-const onsiteRegex = /^\/.+\/.+/;
+// Regex to identify GitHub repository URLs
+const searchRegex = /^https?:\/\/([\w-]+\.)?github\.com\/.+\/.+/;
+const onsiteRegex = /^\/[^/?#]+\/[^/?#]+/;
 
 let popupDiv: {
     element: HTMLDivElement;
@@ -40,7 +40,7 @@ function handleHover(event: MouseEvent) {
 
     if (!target) return;
 
-    
+
 
     if (hoverTimer !== null) {
         clearTimeout(hoverTimer);
@@ -57,7 +57,7 @@ function handleHover(event: MouseEvent) {
 
         if (!href) return;
         if (!target.matches(":hover")) return;
-        if (href.startsWith("#") || href.startsWith("javascript:") || href.startsWith("mailto:")) return;
+        if (href.startsWith("#") || href.startsWith("javascript:") || href.startsWith("data:") || href.startsWith("vbscript:") || href.startsWith("mailto:")) return;
 
         const url = new URL(href, window.location.href);
         const pathSegments = url.pathname.split("/").filter(Boolean);
