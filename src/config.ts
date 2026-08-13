@@ -27,7 +27,7 @@ export const CONFIG = {
             ["gitindex-logo-header", {
                 displayName: "GitIndex Logo in Header",
                 description: "Injects the GitIndex mascot into the GitHub header for branding.",
-                enabled: true
+                enabled: false
             }]
         ]),
         repo: new Map([

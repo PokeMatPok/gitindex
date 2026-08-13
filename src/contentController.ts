@@ -112,7 +112,9 @@ function init() {
             (history as any).__gitIndexPatched = true;
         }
 
-        logoModule.mount(languages);
+       if (CONFIG.features["logo" as keyof typeof CONFIG.features].get("gitindex-logo-header")?.enabled) {
+         logoModule.mount(languages);
+       }
         Modal.createModal();
 
         window.addEventListener("popstate", checkForNavigationChange);
