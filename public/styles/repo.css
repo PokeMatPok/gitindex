@@ -82,3 +82,16 @@
     width: 1rem;
     height: 1rem;
 }
+
+.gitindex-sticky-header {
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    border: 0.0625rem #3d444d solid;
+    border-radius: 0px !important;
+}
+
+.gitindex-sticky-header.rounded-top-2 {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}

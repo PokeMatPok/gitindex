@@ -84,7 +84,8 @@ function matchURLLoader(): { module: loaderData, featureSet: string } | null {
 
 
 function init() {
-    LOG.log("Initializing content script...");
+  LOG.log("Initializing content script...");
+  LOG.info("(°~°)ノシ Hey there! ")
 
     LOG.log("Checking extension context...");
     if (!isExtensionContextValid()) {

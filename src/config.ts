@@ -40,10 +40,15 @@ export const CONFIG = {
                 displayName: "Edit Button",
                 description: "Adds an edit button to repository pages for quick access to editing.",
                 enabled: true
-            }], 
+            }],
             ["file_hover_quick_actions", {
                 displayName: "File Hover Quick Actions",
                 description: "Adds quick action buttons when hovering over files in repository pages.",
+                enabled: true
+          }],
+            ["sticky_tree_header", {
+                displayName: "Sticky Tree Header",
+                description: "Makes the filetree header sticky to preserve it on the screen for long filetrees.",
                 enabled: true
             }]
         ])

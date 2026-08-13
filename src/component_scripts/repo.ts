@@ -3,6 +3,7 @@ import { type loaderData, type feature } from "../types/general";
 import { editButtonModule } from "./repo/edit_button";
 import { pieChartModule } from "./repo/pie_chart_lang_display";
 import { quickActionsModule } from "./repo/quick_actions";
+import { stickyHeaderModule } from "./repo/sticky_header";
 
 export const repoModule: loaderData = {
     mounted: false,
@@ -23,6 +24,10 @@ export const repoModule: loaderData = {
             quickActionsModule.mount(languagesGlobalIn);
         }
 
+        if (featureSet?.get("sticky_tree_header") && !stickyHeaderModule.mounted) {
+            stickyHeaderModule.mount(languagesGlobalIn);
+        }
+
         repoModule.mounted = true;
     },
     unmount: () => {
@@ -41,6 +46,10 @@ export const repoModule: loaderData = {
 
         if (quickActionsModule.mounted) {
             quickActionsModule.unmount();
+        }
+
+        if (stickyHeaderModule.mounted) {
+        stickyHeaderModule.unmount();
         }
 
         repoModule.mounted = false;
