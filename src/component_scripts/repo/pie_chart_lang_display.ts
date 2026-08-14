@@ -151,6 +151,7 @@ function renderUI(owner: string, repo: string) {
   button.style.background = "none";
   button.style.border = "none";
   button.style.cursor = "pointer";
+  button.ariaLabel = "Toggle language view between bar chart and pie chart"
   button.onclick = toggleLangView;
 
   const icon = document.createElement("img");
@@ -159,6 +160,7 @@ function renderUI(owner: string, repo: string) {
   icon.style.width = "16px";
   icon.style.height = "16px";
   icon.style.marginLeft = "8px";
+  icon.alt = "Toggle language view icon"
 
   button.appendChild(icon);
   header.appendChild(button);
