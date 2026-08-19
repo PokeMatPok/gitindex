@@ -42,10 +42,10 @@ const options = {
   plugins: [
     copy({
       resolveFrom: "cwd",
-      assets: {
-        from: ["public/**/*"],
-        to: ["dist"],
-      },
+      assets: [
+        { from: ["public/**/*"], to: ["dist"] },
+        { from: ["public/assets/icons/vscode/*"], to: ["dist/assets/icons/vscode"] },
+      ],
       watch: isWatch,
     }),
   ],

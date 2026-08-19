@@ -36,5 +36,8 @@
     "moduleDetection": "auto",
     "moduleResolution": "bundler",
     "skipLibCheck": true,
+
+    // JSON imports
+    "resolveJsonModule": true
   }
 }
