@@ -1,6 +1,7 @@
 import { LOG } from "../config";
 import { type loaderData, type feature } from "../types/general";
 import { editButtonModule } from "./repo/edit_button";
+import { fileIconsModule } from "./repo/icon_replace";
 import { pieChartModule } from "./repo/pie_chart_lang_display";
 import { quickActionsModule } from "./repo/quick_actions";
 import { stickyHeaderModule } from "./repo/sticky_header";
@@ -28,6 +29,10 @@ export const repoModule: loaderData = {
             stickyHeaderModule.mount(languagesGlobalIn);
         }
 
+      if (featureSet?.get("non_generic_icons") && !fileIconsModule.mounted) {
+        fileIconsModule.mount(languagesGlobalIn);
+      }
+
         repoModule.mounted = true;
     },
     unmount: () => {
@@ -49,7 +54,11 @@ export const repoModule: loaderData = {
         }
 
         if (stickyHeaderModule.mounted) {
-        stickyHeaderModule.unmount();
+            stickyHeaderModule.unmount();
+        }
+
+        if (fileIconsModule.mounted) {
+            fileIconsModule.unmount();
         }
 
         repoModule.mounted = false;

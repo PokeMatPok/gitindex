@@ -50,6 +50,11 @@ export const CONFIG = {
                 displayName: "Sticky Tree Header",
                 description: "Makes the filetree header sticky to preserve it on the screen for long filetrees.",
                 enabled: true
+          }],
+            ["non_generic_icons", {
+                displayName: "File Icons",
+                description: "Shows file-type icons in the repository file tree based on extension and filename.",
+                enabled: true
             }]
         ])
     }
