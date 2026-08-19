@@ -1,6 +1,6 @@
 {
   "name": "Gitindex",
-  "description": "Ever wished that using GitHub was as seamless as using your local IDE? Gitindex brings the power of your IDE to GitHub, allowing you to edit files directly on the platform with the same ease and efficiency as you would on your local machine.",
+  "description": "Gitindex makes editing files on GitHub faster, simpler, and more seamless, right where your code lives.",
   "version": "0.0.1",
   "manifest_version": 3,
   "browser_specific_settings": {
@@ -9,21 +9,14 @@
       "strict_min_version": "109.0"
     }
   },
-  "permissions": [
-    "storage"
-  ],
+  "permissions": ["storage"],
   "action": {
-    "default_popup": "documents/hello.html",
     "default_icon": "logo.png"
   },
   "web_accessible_resources": [
     {
-      "resources": [
-        "assets/*"
-      ],
-      "matches": [
-        "https://github.com/*"
-      ]
+      "resources": ["assets/*"],
+      "matches": ["https://github.com/*"]
     }
   ],
   "content_scripts": [
@@ -39,9 +32,7 @@
         "styles/logo.css",
         "styles/modal.css"
       ],
-      "js": [
-        "scripts/content.js"
-      ]
+      "js": ["scripts/content.js"]
     }
   ]
 }
