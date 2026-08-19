@@ -1,7 +1,7 @@
 {
   "name": "Gitindex",
   "description": "Gitindex makes editing files on GitHub faster, simpler, and more seamless, right where your code lives.",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "manifest_version": 3,
   "browser_specific_settings": {
     "gecko": {

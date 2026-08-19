@@ -1,7 +1,16 @@
 {
   "name": "Gitindex",
+<<<<<<< Updated upstream
   "description": "Gitindex makes editing files on GitHub faster, simpler, and more seamless, right where your code lives.",
+=======
+<<<<<<< Updated upstream
+  "description": "Ever wished that using GitHub was as seamless as using your local IDE? Gitindex brings the power of your IDE to GitHub, allowing you to edit files directly on the platform with the same ease and efficiency as you would on your local machine.",
+>>>>>>> Stashed changes
   "version": "0.0.1",
+=======
+  "description": "Gitindex makes editing files on GitHub faster, simpler, and more seamless, right where your code lives.",
+  "version": "0.1.0",
+>>>>>>> Stashed changes
   "manifest_version": 3,
   "browser_specific_settings": {
     "gecko": {
